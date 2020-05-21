@@ -1,2 +1,2 @@
 ### PointGMM
-The code and pretreined models will be available soon.
+The pre trained models will be available soon.

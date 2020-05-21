@@ -1,0 +1,12 @@
+raw_data
+__pycache__
+.idea
+
+checkpoints/
+*.gif
+*.png
+*.obj
+*.ply
+*.off
+*.blend*
+*_ig_*
