@@ -9,7 +9,7 @@ This is the official Pytorch implementation of the CVPR2020 paper [PointGMM: a N
 &nbsp;&nbsp;  Redirect ```constants.CHECKPOINTS_ROOT``` to the models directory.
 
 – Train a VAE model: ```python train.py -d 0 -c airplane```. <br>
-&nbsp;&nbsp; where ```d``` specify the GPU id and ```c``` specify one of the [ShapeNetCore category](process_data/categories.txt).
+&nbsp;&nbsp; where ```d``` specify the GPU id and ```c``` specify one of the [ShapeNetCore categories](process_data/categories.txt).
 
 – Train a registration model: ```python train.py -d 1 -c chair -r```. <br>
 
