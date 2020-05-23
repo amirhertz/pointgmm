@@ -1,0 +1,7 @@
+airplane  birdhouse  can                 dishwasher  jar          microwave   printer         table
+ashcan    bookshelf  cap                 display     knife        motorcycle  remote_control  telephone
+bag       bottle     car                 earphone    lamp         mug         rifle           tower
+basket    bowl       cellular_telephone  faucet      laptop       piano       rocket          train
+bathtub   bus        chair               file        loudspeaker  pillow      skateboard      vessel
+bed       cabinet    clock               guitar      mailbox      pistol      sofa            washer
+bench     camera     computer_keyboard   helmet      microphone   pot         stove
