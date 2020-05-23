@@ -190,19 +190,21 @@ class RegistrationTrainer(Trainer):
         self.zeros = torch.zeros(self.opt.batch_size, self.opt.dim_t, device=device).detach()
 
 
-def get_args(args: List[str]) -> Tuple[D, bool]:
+# sorry, I don't like argparse
+def get_args(args: List[str]) -> Tuple[D, str, bool]:
     train_type = '-r' in args
-    device_id = int(args[args.index('-c') + 1]) if '-c' in args else -1
+    device_id = int(args[args.index('-d') + 1]) if '-d' in args else -1
+    cls = args[args.index('-c') + 1] if '-c' in args else 'chair'
     device = CUDA(device_id) if  device_id >=0 else (CUDA(0) if torch.cuda.is_available() else CPU)
-    return device, train_type
+    return device, cls, train_type
 
 
 def main():
-    device, train_type = get_args(sys.argv[1:])
+    device, cls, train_type = get_args(sys.argv[1:])
     if train_type:
-        trainer = RegistrationTrainer(options.RegOptions().load(), device)
+        trainer = RegistrationTrainer(options.RegOptions(tag=cls).load(), device)
     else:
-        trainer = VaeTrainer(options.TrainOptions().load(), device)
+        trainer = VaeTrainer(options.TrainOptions(tag=cls).load(), device)
     trainer.train()
 
 

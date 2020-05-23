@@ -1,7 +1,7 @@
 import models.model_factory as factory
 import models.gm_utils as gm_utils
 from options import TrainOptions, Options
-from constants import ART_DIR
+from constants import OUT_DIR
 from show.view_utils import view
 from custom_types import *
 from process_data.mesh_loader import get_loader, AnotherLoaderWrap
@@ -89,7 +89,7 @@ def saving_handler(args: Options, trace: ViewMem):
                     saving_dict[i][prefix] += saving_f[i](items[i], path, prefix, saving_dict[i][prefix], trace)
 
     saving_dict = [dict(), dict()]
-    saving_folders = [f'{ART_DIR}/{args.info}/eval_images/', f'{ART_DIR}/{args.info}/eval_points/']
+    saving_folders = [f'{OUT_DIR}/{args.info}/eval_images/', f'{OUT_DIR}/{args.info}/eval_points/']
     saving_f = [save_pil_image, save_np_points]
     suffix = ['.png', '.npz']
     return handle

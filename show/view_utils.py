@@ -4,36 +4,7 @@ from process_data.files_utils import collect
 import os
 from process_data.files_utils import init_folders
 from show.viewer_mpl import view_mpl as view_backend
-import matplotlib.pyplot as plt
 from custom_types import *
-
-
-def gifed(folder: str, interval: float, preffix: str = '', multi_mode: bool = True):
-    files = collect(folder, '.png')
-    last_tag, root = None, None
-    images = []
-    duration = []
-    for file in files:
-        if multi_mode:
-            split = file[1].split('_')
-            if len(split) < 3:
-                continue
-            cur_tag = split[0]
-        else:
-            cur_tag = ''
-        if last_tag is not None and (cur_tag != last_tag or root != file[0]) and len(images) > 1:
-            imageio.mimsave(f'{folder}{preffix}{last_tag}.gif', images, duration=interval)
-            images = []
-        file_name = ''.join(file)
-        images.append(imageio.imread(file_name))
-        if len(images) % 14 == 1:
-            duration.append(0.4)
-        else:
-            duration.append(interval)
-        last_tag = cur_tag
-        root = file[0]
-    if last_tag is not None and len(images) > 1:
-        imageio.mimsave(f'{folder}{preffix}{last_tag}.gif', images, duration=interval)
 
 
 def sample_on_mesh(mesh: tuple, face_areas: V, num_samples: int) -> V:
@@ -47,57 +18,18 @@ def sample_on_mesh(mesh: tuple, face_areas: V, num_samples: int) -> V:
     return samples.astype(np.float32)
 
 
-def init_palettes(cmap='Spectral'):
-    colors = {}
-    color_map = plt.cm.get_cmap(cmap)
+def create_palettes(splits: VS, palette: Union[N, List[List[float]]] = None) -> List[List[float]]:
 
-    def get_palette(num_colors: int) -> list:
-        nonlocal colors, color_map
-        if num_colors == 1:
-            return [.45]
-        if num_colors not in colors:
-            colors[num_colors] = [color_map(float(idx) / (num_colors - 1)) for idx in range(num_colors)]
-        return colors[num_colors]
-
-    return get_palette
-
-
-def create_palettes(splits: list, pallete = None) -> list:
-    if pallete is None:
+    if palette is None:
         palette = []
-        picker = init_palettes()
         for split in splits:
-            num_colors = len(split) - 1
-            palette.append(picker(num_colors))
-    return pallete
+            if len(split) == 2:
+                palette.append([.3])
+            else:
+                num_colors = len(split) - 1
+                palette.append([ .1 + (.7 * i) / (num_colors - 1) for i in range(num_colors)])
 
-#
-# def init_palette(splits: list, palette):
-#
-#     # def build_palette(palette_: list, size: int):
-#     #     ratio = float(len(palette_)) / size
-#     #     if ratio == 1:
-#     #         new_palette = palette_
-#     #     elif ratio == 0:
-#     #         new_palette = [int((i + .5) * 200 / size) for i in range(size)]
-#     #     else:
-#     #         new_palette = []
-#     #         for i in range(size):
-#     #             c = palette_[int(i * ratio)]
-#     #             c = min(max(c + int(np.random.randint(-40, 41)), 0), 255)
-#     #             new_palette.append(c)
-#     #     return new_palette
-#
-#     if palette is None:
-#         palette = []
-#         for split in splits:
-#             if len(split) == 2:
-#                 palette.append([.3])
-#             else:
-#                 num_colors = len(split) - 1
-#                 palette.append([ .1 + (.7 * i) / (num_colors - 1) for i in range(num_colors)])
-#
-#     return palette
+    return palette
 
 
 def split_by_ref(points, refs):
@@ -162,17 +94,6 @@ def blend_images(images: List[V], blend_height: int, blend_width: int, rows: int
             blend_a[ma] = blend_b[ma]
             images[image_index][-blend_width:, :] = blend_a
             images[image_index + cols] = images[image_index + cols][blend_width:, :]
-
-    # for j in range(blend_width):
-    #     alpha = j / (blend_width -1)
-    #     for im in images:
-    #         im[:, j, :] =  alpha * im[:, j, :] + (1 - alpha) * 255.
-    #         im[:, -j, :] = alpha * im[:, -j, :] + (1 - alpha) * 255.
-    # for j in range(blend_height):
-    #     alpha = j / (blend_height -1)
-    #     for im in images:
-    #         im[j, :, :] =  alpha * im[j, :, :] + (1 - alpha) * 255.
-    #         im[-j, :, :] = alpha * im[-j, :, :] + (1 - alpha) * 255.
     return images
 
 
